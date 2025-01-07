@@ -13,8 +13,7 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     DEBUG: bool = False
-    MONGODB_URL: str = "mongodb://rembg_mongodb_dev:27017"
-    MONGODB_DB: str = "rembg"
+    FIREBASE_CREDENTIALS_BASE64: str = ""  # Base64 encoded credentials
     ALLOWED_ORIGINS: str = "http://localhost:3000"
     ENVIRONMENT: str = "development"
     

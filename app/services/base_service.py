@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import logging
-from app.core.mongodb import mongodb
+from app.core.firebase import firebase
 
 logger = logging.getLogger(__name__)
 
@@ -10,9 +10,9 @@ class BaseService:
     def __init__(self, settings, service_name: str):
         @asynccontextmanager
         async def lifespan(app: FastAPI):
-            await mongodb.connect_to_database()
+            await firebase.connect_to_database()
             yield
-            await mongodb.close_database_connection()
+            await firebase.close_database_connection()
 
         self.app = FastAPI(
             title=settings.PROJECT_NAME,

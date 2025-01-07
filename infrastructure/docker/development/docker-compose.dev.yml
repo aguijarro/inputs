@@ -1,23 +1,13 @@
 version: '3.8'
 
 services:
-  inputs_python_mongodb:
-    image: mongo:latest
-    container_name: inputs_python_mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - inputs_mongodb_data:/data/db
-    networks:
-      - inputs_mongodb_network
-
-  inputs_mongodb_dev:
+  inputs_firebase_dev:
     build:
       context: ../../../
       dockerfile: infrastructure/docker/development/app/Dockerfile
       args:
         - ENVIRONMENT=development
-    container_name: inputs_mongodb_dev
+    container_name: inputs_firebase_dev
     restart: unless-stopped
     env_file:
       - .env.development
@@ -26,22 +16,16 @@ services:
     volumes:
       - ../../../app:/usr/inputs_python/app:rw
     networks:
-      - inputs_mongodb_network
+      - inputs_network      
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 5s
-    depends_on:
-      - inputs_python_mongodb
-    environment:
-      - MONGODB_URL=mongodb://inputs_python_mongodb:27017
 
 networks:
-  inputs_mongodb_network:
+  inputs_network:
     driver: bridge
 
-volumes:
-  inputs_mongodb_data:
 

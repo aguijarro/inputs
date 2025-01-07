@@ -1,5 +1,5 @@
 from datetime import datetime
-from app.core.mongodb import mongodb
+from app.core.firebase import firebase
 
 class HealthRepository:
     @staticmethod
@@ -8,16 +8,18 @@ class HealthRepository:
             "name": name,
             "created_at": datetime.utcnow()
         }
-        result = await mongodb.db.test_collection.insert_one(test_item)
-        test_item["_id"] = str(result.inserted_id)
+        doc_ref = firebase.db.collection('test_collection').document()
+        doc_ref.set(test_item)
+        test_item["id"] = doc_ref.id
         return test_item
 
     @staticmethod
     async def get_all_items():
-        cursor = mongodb.db.test_collection.find({})
         items = []
-        async for document in cursor:
-            document["id"] = str(document.pop("_id"))
-            items.append(document)
+        docs = firebase.db.collection('test_collection').stream()
+        for doc in docs:
+            item = doc.to_dict()
+            item["id"] = doc.id
+            items.append(item)
         return items
 
