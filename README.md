@@ -34,3 +34,14 @@ curl -X POST "http://localhost:8005/api/v1/health_db" \
 
 # Get all items
 curl http://localhost:8005/api/v1/health_db
+
+# Create inputs
+curl -X POST "http://localhost:8005/api/v1/inputs" \
+  -H "Content-Type: application/json" \
+  -d '[
+    {"name": "input1", "value": 42},
+    {"name": "input2", "value": "test"}
+  ]'
+
+# Get all inputs
+curl http://localhost:8005/api/v1/inputs
